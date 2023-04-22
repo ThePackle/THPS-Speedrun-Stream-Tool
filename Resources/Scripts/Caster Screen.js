@@ -8,7 +8,7 @@ let introDelay = .8; //all animations will get this delay when the html loads (u
 
 //to avoid the code constantly running the same method over and over
 let p1CharacterPrev, p1SkinPrev, p1ScorePrev, p1ColorPrev, p1wlPrev;
-let p2CharacterPrev, p2SkinPrev, p2ScorePrev, p2ColorPrev, p2wlPrev;
+let p2CharacterPrev, p2SkinPrev, p2ScorePrev, p2ColorPrev, p3ColorPrev, p2wlPrev;
 let bestOfPrev;
 
 //max text sizes (used when resizing back)
@@ -51,11 +51,13 @@ async function getData(scInfo) {
 	let p1Skin = scInfo['p1Skin'];
 	let p1WL = scInfo['p1WL'];
 	
+	
 	let p2Name = scInfo['p2Name'];
 	let p2Team = scInfo['p2Team'];
 	let p2Pron = scInfo['p2Pron']
 	let p2Score = scInfo['p2Score'];
 	let p2Color = scInfo['p2Color'];
+	let p3Color = scInfo['p3Color'];
 	let p2Character = scInfo['p2Character'];
 	let p2Skin = scInfo['p2Skin'];
 	let p2WL = scInfo['p2WL'];
@@ -71,7 +73,10 @@ async function getData(scInfo) {
 	twitch1 = scInfo['caster1Twitch'];
 	let caster2 = scInfo['caster2Name'];
 	twitter2 = scInfo['caster2Twitter'];
-	twitch2 = scInfo['caster2Twitch'];;
+	twitch2 = scInfo['caster2Twitch'];
+	let caster3 = scInfo['caster3Name'];
+	twitter3 = scInfo['caster3Twitter'];
+	twitch3 = scInfo['caster3Twitch'];
 
 
 	//first, things that will happen only the first time the html loads
@@ -103,10 +108,15 @@ async function getData(scInfo) {
 				p2IntroEL.style.fontSize = '60px';
 				p2IntroEL.textContent = p2Name; //p2
 				resizeText(p2IntroEL);
+				p3IntroEL.style.fontSize = '60px';
+				p3IntroEL.textContent = p3Name; //p2
+				resizeText(p3IntroEL);
 
 				//change the color of the player text shadows
 				p1IntroEL.style.textShadow = '0px 0px 20px ' + getHexColor(p1Color);
 				p2IntroEL.style.textShadow = '0px 0px 20px ' + getHexColor(p2Color);
+				p3IntroEL.style.textShadow = '0px 0px 20px ' + getHexColor(p3Color);
+
 
 				//player 1 name fade in
 				gsap.fromTo("#p1Intro",
@@ -207,6 +217,9 @@ async function getData(scInfo) {
 		updateColor('p2Color', 'p2Team', p2Color);
 		p2ColorPrev = p2Color;
 
+		updateColor('p3Color', 'p2Team', p3Color);
+		p3ColorPrev = p3Color;
+
 
 		//set this for later
 		bestOfPrev = bestOf;
@@ -243,16 +256,23 @@ async function getData(scInfo) {
 		updateSocialText("caster2N", caster2, casterSize, "caster2TextBox");
 		updateSocialText("caster2Tr", twitter2, twitterSize, "caster2TwitterBox");
 		updateSocialText("caster2Th", twitch2, twitterSize, "caster2TwitchBox");
+		updateSocialText("caster3N", caster3, casterSize, "caster3TextBox");
+		updateSocialText("caster3Tr", twitter3, twitterSize, "caster3TwitterBox");
+		updateSocialText("caster3Th", twitch3, twitterSize, "caster3TwitchBox");
 
 		//setup twitter/twitch change
 		socialChange1("caster1TwitterBox", "caster1TwitchBox");
 		socialChange2("caster2TwitterBox", "caster2TwitchBox");
+		socialChange3("caster3TwitterBox", "caster3TwitchBox");
 		//set an interval to keep changing the names
 		socialInt1 = setInterval( () => {
 			socialChange1("caster1TwitterBox", "caster1TwitchBox");
 		}, socialInterval);
 		socialInt2 = setInterval(() => {
 			socialChange2("caster2TwitterBox", "caster2TwitchBox");
+		}, socialInterval);
+		socialInt3 = setInterval(() => {
+			socialChange3("caster3TwitterBox", "caster3TwitchBox");
 		}, socialInterval);
 
 		//keep changing this boolean for the previous intervals
@@ -270,6 +290,9 @@ async function getData(scInfo) {
 		}
 		if (caster2 == "") {
 			document.getElementById('caster2TextBox').style.opacity = 0;
+		}
+		if (caster3 == "") {
+			document.getElementById('caster3TextBox').style.opacity = 0;
 		}
 
 
@@ -396,6 +419,12 @@ async function getData(scInfo) {
 			p2ColorPrev = p2Color;
 		}
 
+		if (p3ColorPrev != p3Color) {
+			updateColor('p3Color', 'p2Team', p3Color);
+			updateScore(2, p2Score, p3Color);
+			p3ColorPrev = p3Color;
+		}
+
 		if (document.getElementById('p2Team').textContent != p2Team) {
 			fadeOut("#teamLogoP2", () => {
 				updateTeamLogo("teamLogoP2", p2Team);
@@ -495,6 +524,25 @@ async function getData(scInfo) {
 
 		if (document.getElementById('caster2Th').textContent != twitch2){
 			updateSocial(twitch2, "caster2Th", "caster2TwitchBox", twitter2, "caster2TwitterBox");
+		}
+
+		//update caster 3 info
+		if (document.getElementById('caster3N').textContent != caster3){
+			fadeOut("#caster3TextBox", () => {
+				updateSocialText("caster3N", caster3, casterSize, 'caster3TextBox');
+				//if no caster name, dont fade in the caster icon
+				if (caster3 != "") {
+					fadeIn("#caster3TextBox", .2);
+				}
+			});
+		}
+		//caster 1's twitter
+		if (document.getElementById('caster3Tr').textContent != twitter3){
+			updateSocial(twitter3, "caster3Tr", "caster3TwitterBox", twitter3, "caster3TwitchBox");
+		}
+		//caster 2's twitch (same as above)
+		if (document.getElementById('caster3Th').textContent != twitch3){
+			updateSocial(twitch3, "caster3Th", "caster3TwitchBox", twitch3, "caster3TwitterBox");
 		}
 	}
 }
@@ -626,11 +674,44 @@ function socialChange2(twitterWrapperID, twitchWrapperID) {
 
 	}
 }
+
+function socialChange3(twitterWrapperID, twitchWrapperID) {
+
+	const twitterWrapperEL = document.getElementById(twitterWrapperID);
+	const twitchWrapperEL = document.getElementById(twitchWrapperID);
+
+	if (startup) {
+
+		if (!twitter3 && !twitch3) {
+			twitterWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 0;
+		} else if (!twitter3 && !!twitch3) {
+			twitterWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 1;
+		} else {
+			twitterWrapperEL.style.opacity = 1;
+			twitchWrapperEL.style.opacity = 0;
+		}
+
+	} else if (!!twitter3 && !!twitch3) {
+
+		if (socialSwitch) {
+			fadeOut(twitterWrapperEL, () => {
+				fadeIn(twitchWrapperEL, 0);
+			});
+		} else {
+			fadeOut(twitchWrapperEL, () => {
+				fadeIn(twitterWrapperEL, 0);
+			});
+		}
+
+	}
+}
 //function to decide when to change to what
 function updateSocial(mainSocial, mainText, mainBox, otherSocial, otherBox) {
 	//check if this is for twitch or twitter
 	let localSwitch = socialSwitch;
-	if (mainText == "caster1Th" || mainText == "caster2Th") {
+	if (mainText == "caster1Th" || mainText == "caster2Th" || mainText == "caster3Th") {
 		localSwitch = !localSwitch;
 	}
 	//check if this is their turn so we fade out the other one

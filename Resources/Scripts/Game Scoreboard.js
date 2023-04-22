@@ -7,8 +7,8 @@ const fadeOutTime = .2;
 let introDelay = .8; //all animations will get this delay when the html loads (use this so it times with your transition)
 
 //to avoid the code constantly running the same method over and over
-let p1CharacterPrev, p1SkinPrev, p1ScorePrev, p1ColorPrev, p1wlPrev;
-let p2CharacterPrev, p2SkinPrev, p2ScorePrev, p2ColorPrev, p2wlPrev;
+let p1CharacterPrev, p1SkinPrev, p1ScorePrev, p1TimePrev, p1ColorPrev, p1wlPrev;
+let p2CharacterPrev, p2SkinPrev, p2ScorePrev, p2TimePrev, p2ColorPrev, p2wlPrev;
 let bestOfPrev;
 
 //max text sizes (used when resizing back)
@@ -18,11 +18,13 @@ const twitterSize = '20px';
 const p1NScoreSize = '55px';
 const p2NScoreSize = '55px';
 const formatSize = '28px';
+const p1NTimeSize = '32px';
+const p2NTimeSize = '32px';
 
 //variables for the twitter/twitch constant change
 let socialInt1;
 let socialInt2;
-let twitter1, twitch1, twitter2, twitch2;
+let twitter1, twitch1, twitter2, twitch2, twitter3, twitch3;
 let socialSwitch = true; //true = twitter, false = twitch
 const socialInterval = 12000;
 
@@ -51,6 +53,8 @@ async function getData(scInfo) {
 	let p1Character = scInfo['p1Character'];
 	let p1Skin = scInfo['p1Skin'];
 	let p1WL = scInfo['p1WL'];
+	let p1Time = scInfo['p1Time'];
+	
 	
 	let p2Name = scInfo['p2Name'];
 	let p2Team = scInfo['p2Team'];
@@ -60,9 +64,13 @@ async function getData(scInfo) {
 	let p2Character = scInfo['p2Character'];
 	let p2Skin = scInfo['p2Skin'];
 	let p2WL = scInfo['p2WL'];
+	let p2Time = scInfo['p2Time'];
 
 	let p1NScore = scInfo ['p1NScore'];
 	let p2NScore = scInfo ['p2NScore'];
+
+	let p1NTime = scInfo['p1NTime'];
+	let p2NTime = scInfo['p2NTime'];
 
 	let round = scInfo['round'];
 	let bestOf = scInfo['bestOf'];
@@ -73,7 +81,10 @@ async function getData(scInfo) {
 	twitch1 = scInfo['caster1Twitch'];
 	let caster2 = scInfo['caster2Name'];
 	twitter2 = scInfo['caster2Twitter'];
-	twitch2 = scInfo['caster2Twitch'];;
+	twitch2 = scInfo['caster2Twitch'];
+	let caster3 = scInfo['caster3Name'];
+	twitter3 = scInfo['caster3Twitter'];
+	twitch3 = scInfo['caster3Twitch'];
 
 
 	//first, things that will happen only the first time the html loads
@@ -182,11 +193,11 @@ async function getData(scInfo) {
 		moveScoresIntro(1, bestOf, p1WL, sMove);
 		//yeah same thing here
 		p1ScorePrev = p1Score;
+		p1TimePrev = p1Time;
 
 		//set the color
 		updateColor('p1Color', 'p1Name', p1Color);
 		p1ColorPrev = p1Color;
-
 
 		//took notes from player 1? well, this is exactly the same!
 		updatePlayerName('p2Wrapper', 'p2Name', 'p2Team', 'p2Pron', p2Name, p2Team, p2Pron);
@@ -205,6 +216,7 @@ async function getData(scInfo) {
 		updateScore(2, p2Score, p2Color);
 		moveScoresIntro(2, bestOf, p2WL, -sMove);
 		p2ScorePrev = p2Score;
+		p2TimePrev = p2Time;
 
 		updateColor('p2Color', 'p2Name', p2Color);
 		p2ColorPrev = p2Color;
@@ -232,16 +244,25 @@ async function getData(scInfo) {
 			gsap.to("#overlayFormat", 
 			{delay: introDelay, opacity: 1, ease: "power2.out", duration: fadeInTime+.2});
 		}
-		
 
 		updatep1NScore(p1NScore);
 		updatep2NScore(p2NScore);
+		updatep1NTime(p1NTime);
+		updatep2NTime(p2NTime)
 
 		gsap.fromTo("#p1NScore", 
 			{x: -pMove}, //from
 			{delay: introDelay+.2, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime}); //to
 
 		gsap.fromTo("#p2NScore", 
+			{x: pMove}, //from
+			{delay: introDelay+.2, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime}); //to
+
+		gsap.fromTo("#p1NTime", 
+			{x: -pMove}, //from
+			{delay: introDelay+.2, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime}); //to
+
+		gsap.fromTo("#p2NTime", 
 			{x: pMove}, //from
 			{delay: introDelay+.2, x: 0, opacity: 1, ease: "power2.out", duration: fadeInTime}); //to
 
@@ -252,16 +273,23 @@ async function getData(scInfo) {
 		updateSocialText("caster2N", caster2, casterSize, "caster2TextBox");
 		updateSocialText("caster2Tr", twitter2, twitterSize, "caster2TwitterBox");
 		updateSocialText("caster2Th", twitch2, twitterSize, "caster2TwitchBox");
+		updateSocialText("caster3N", caster3, casterSize, "caster3TextBox");
+		updateSocialText("caster3Tr", twitter3, twitterSize, "caster3TwitterBox");
+		updateSocialText("caster3Th", twitch3, twitterSize, "caster3TwitchBox");
 
 		//setup twitter/twitch change
 		socialChange1("caster1TwitterBox", "caster1TwitchBox");
 		socialChange2("caster2TwitterBox", "caster2TwitchBox");
+		socialChange3("caster3TwitterBox", "caster3TwitchBox");
 		//set an interval to keep changing the names
 		socialInt1 = setInterval( () => {
 			socialChange1("caster1TwitterBox", "caster1TwitchBox");
 		}, socialInterval);
 		socialInt2 = setInterval(() => {
 			socialChange2("caster2TwitterBox", "caster2TwitchBox");
+		}, socialInterval);
+		socialInt3 = setInterval(() => {
+			socialChange3("caster3TwitterBox", "caster3TwitchBox");
 		}, socialInterval);
 
 		//keep changing this boolean for the previous intervals
@@ -279,6 +307,9 @@ async function getData(scInfo) {
 		}
 		if (caster2 == "") {
 			document.getElementById('caster2TextBox').style.opacity = 0;
+		}
+		if (caster3 == "") {
+			document.getElementById('caster3TextBox').style.opacity = 0;
 		}
 
 
@@ -346,6 +377,16 @@ async function getData(scInfo) {
 			p1ScorePrev = p1Score;
 		}
 
+		if (p1TimePrev != p1NTime) {
+			fadeOut("#p1NTime", () => {
+				updatep1NTime(p1NTime);
+				if(p1NTime != ""){
+					fadeIn("#p1NTime");
+				}
+			});
+			p1TimePrev = p1NTime;
+		}
+
 		//change the player's colors
 		if (p1ColorPrev != p1Color) {
 			updateColor('p1Color', 'p1Team', p1Color);
@@ -397,6 +438,16 @@ async function getData(scInfo) {
 		if (p2ScorePrev != p2Score) {
 			updateScore(2, p2Score, p2Color);
 			p2ScorePrev = p2Score;
+		}
+
+		if (p2TimePrev != p2NTime) {
+			fadeOut("#p2NTime", () => {
+				updatep2NTime(p2NTime);
+				if(p2NTime != ""){
+					fadeIn("#p2NTime");
+				}
+			});
+			p2TimePrev = p2NTime;
 		}
 
 		if (p2ColorPrev != p2Color) {
@@ -478,7 +529,6 @@ async function getData(scInfo) {
 			});
 		}
 
-
 		//update caster 1 info
 		if (document.getElementById('caster1N').textContent != caster1){
 			fadeOut("#caster1TextBox", () => {
@@ -514,6 +564,24 @@ async function getData(scInfo) {
 		if (document.getElementById('caster2Th').textContent != twitch2){
 			updateSocial(twitch2, "caster2Th", "caster2TwitchBox", twitter2, "caster2TwitterBox");
 		}
+		//update caster 3 info
+		if (document.getElementById('caster3N').textContent != caster3){
+			fadeOut("#caster3TextBox", () => {
+				updateSocialText("caster3N", caster3, casterSize, 'caster3TextBox');
+				//if no caster name, dont fade in the caster icon
+				if (caster3 != "") {
+					fadeIn("#caster3TextBox", .2);
+				}
+			});
+		}
+		//caster 1's twitter
+		if (document.getElementById('caster3Tr').textContent != twitter3){
+			updateSocial(twitter3, "caster3Tr", "caster3TwitterBox", twitter3, "caster3TwitchBox");
+		}
+		//caster 2's twitch (same as above)
+		if (document.getElementById('caster3Th').textContent != twitch3){
+			updateSocial(twitch3, "caster3Th", "caster3TwitchBox", twitch3, "caster3TwitterBox");
+		}
 	}
 }
 
@@ -530,18 +598,24 @@ function updateScore(pNum, pScore, pColor) {
 	const score2EL = document.getElementById('win2P'+pNum);
 	const score3EL = document.getElementById('win3P'+pNum);
 
+	const time1EL = document.getElementById('time1P'+pNum);
+	const time2EL = document.getElementById('time2P'+pNum);
 
 	if (pScore >= 1) {
 		scoreChange(score1EL, getHexColor(pColor));
+		scoreChange(time1EL, getHexColor(pColor));
 	} else if (score1EL.style.fill != "rgb(65, 65, 65)") {
 		scoreChange(score1EL, "#727272");
+		scoreChange(time1EL, "#727272");
 	}
 	if (pScore >= 2) {
 		scoreChange(score2EL, getHexColor(pColor));
+		scoreChange(time2EL, getHexColor(pColor));
 	} else if (score2EL.style.fill != "rgb(65, 65, 65)") {
 		scoreChange(score2EL, "#727272");
+		scoreChange(time2EL, "#727272");
 	}
-	if (pScore == 3) {
+	if (pScore <= 3) {
 		scoreChange(score3EL, getHexColor(pColor));
 	} else if (score3EL.style.fill != "rgb(65, 65, 65)") {
 		scoreChange(score3EL, "#727272");
@@ -644,11 +718,44 @@ function socialChange2(twitterWrapperID, twitchWrapperID) {
 
 	}
 }
+
+function socialChange3(twitterWrapperID, twitchWrapperID) {
+
+	const twitterWrapperEL = document.getElementById(twitterWrapperID);
+	const twitchWrapperEL = document.getElementById(twitchWrapperID);
+
+	if (startup) {
+
+		if (!twitter3 && !twitch3) {
+			twitterWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 0;
+		} else if (!twitter3 && !!twitch3) {
+			twitterWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 1;
+		} else {
+			twitterWrapperEL.style.opacity = 1;
+			twitchWrapperEL.style.opacity = 0;
+		}
+
+	} else if (!!twitter3 && !!twitch3) {
+
+		if (socialSwitch) {
+			fadeOut(twitterWrapperEL, () => {
+				fadeIn(twitchWrapperEL, 0);
+			});
+		} else {
+			fadeOut(twitchWrapperEL, () => {
+				fadeIn(twitterWrapperEL, 0);
+			});
+		}
+
+	}
+}
 //function to decide when to change to what
 function updateSocial(mainSocial, mainText, mainBox, otherSocial, otherBox) {
 	//check if this is for twitch or twitter
 	let localSwitch = socialSwitch;
-	if (mainText == "caster1Th" || mainText == "caster2Th") {
+	if (mainText == "caster1Th" || mainText == "caster2Th" || mainText == "caster3Th") {
 		localSwitch = !localSwitch;
 	}
 	//check if this is their turn so we fade out the other one
@@ -730,6 +837,21 @@ function updatep2NScore(p2NScore) {
 	resizeText(p2NScoreEL); //resize it if it overflows
 }
 
+function updatep1NTime(p1NTime) {
+	const p1NTimeEL = document.getElementById('p1NTime');
+	p1NTimeEL.style.fontSize = p1NTimeSize; //set original text size
+	p1NTimeEL.textContent = p1NTime; //change the actual text
+	resizeText(p1NTimeEL); //resize it if it overflows
+}
+
+function updatep2NTime(p2NTime) {
+	const p2NTimeEL = document.getElementById('p2NTime');
+	p2NTimeEL.style.fontSize = p2NTimeSize; //set original text size
+	p2NTimeEL.textContent = p2NTime; //change the actual text
+	resizeText(p2NTimeEL); //resize it if it overflows
+}
+
+
 //fade out
 function fadeOut(itemID, funct) {
 	gsap.to(itemID, {opacity: 0, duration: fadeOutTime, onComplete: funct});
@@ -800,7 +922,7 @@ function moveScoresIntro(pNum, bestOf, pWL, move) {
 
 }
 
-
+ 
 //check if winning or losing in a GF, then change image
 function updateWL(pWL, playerNum) {
 	const pWLEL = document.getElementById('wlP' + playerNum + 'Text');
