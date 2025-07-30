@@ -14,7 +14,7 @@ class App:
         self.root = root
         self.root.title("THPS Speedrun Mode Tournament Tracker")
         self.root.config(bg="#E4E2E2")
-        self.root.geometry("900x625")
+        self.root.geometry("900x650")
 
         icon_path = os.path.join(BASE_DIR, "assets", "images", "favicon.png")
         icon = Image.open(icon_path)
@@ -25,16 +25,26 @@ class App:
         load_json.load_from_json(self)
 
     def build_gui(self) -> None:
-        self.p1Seed, self.p1Pron, self.p1Name, self.p1NScore, self.p1NTime = (
-            self.create_player_section(x=19, y=42, bg="#8367ff", title="Player 1")
-        )
+        (
+            self.p1Seed,
+            self.p1Pron,
+            self.p1Name,
+            self.p1Twitch,
+            self.p1NScore,
+            self.p1NTime,
+        ) = self.create_player_section(x=19, y=42, bg="#8367ff", title="Player 1")
 
-        self.p2Seed, self.p2Pron, self.p2Name, self.p2NScore, self.p2NTime = (
-            self.create_player_section(x=463, y=42, bg="#8c0000", title="Player 2")
-        )
+        (
+            self.p2Seed,
+            self.p2Pron,
+            self.p2Name,
+            self.p2Twitch,
+            self.p2NScore,
+            self.p2NTime,
+        ) = self.create_player_section(x=463, y=42, bg="#8c0000", title="Player 2")
 
         matchinfo = tk.LabelFrame(self.root, text="Match Info", bg="#E4E2E2", fg="#000")
-        matchinfo.place(x=19, y=260, width=869, height=120)
+        matchinfo.place(x=19, y=300, width=869, height=120)
 
         self.bestOf = self.make_entry(matchinfo, row=1, column=0, label="Best Of")
         self.round = self.make_entry(matchinfo, row=1, column=1, label="Round Name")
@@ -44,7 +54,7 @@ class App:
 
         self.Casters = []
         casterframe = tk.LabelFrame(self.root, text="Casters", bg="#E4E2E2", fg="#000")
-        casterframe.place(x=19, y=380, width=869, height=180)
+        casterframe.place(x=19, y=420, width=869, height=180)
 
         for i in range(3):
             y = i * 2
@@ -59,7 +69,7 @@ class App:
         update_btn = tk.Button(
             self.root, text="UPDATE", command=self.update_json, bg="#CCCCCC"
         )
-        update_btn.place(x=19, y=560, width=869, height=40)
+        update_btn.place(x=19, y=600, width=869, height=40)
 
     def create_player_section(
         self,
@@ -78,10 +88,11 @@ class App:
         seed = self.make_labeled_spinbox(frame, "Seed", row=0, bg=bg)
         pronoun = self.make_labeled_entry(frame, "Pronouns", row=1, bg=bg)
         name = self.make_labeled_entry(frame, "Name", row=2, bg=bg)
-        score = self.make_labeled_spinbox(frame, "Rounds Won", row=3, bg=bg)
-        time = self.make_labeled_entry(frame, "Time [0:00.000]", row=4, bg=bg)
+        twitch = self.make_labeled_entry(frame, "Twitch", row=3, bg=bg)
+        score = self.make_labeled_spinbox(frame, "Rounds Won", row=4, bg=bg)
+        time = self.make_labeled_entry(frame, "Time [0:00.000]", row=5, bg=bg)
 
-        return seed, pronoun, name, score, time
+        return seed, pronoun, name, twitch, score, time
 
     def make_labeled_entry(
         self, parent: tk.Widget, label: str, row: int, bg: str
@@ -121,6 +132,7 @@ class App:
             "p1Team": self.p1Seed.get(),
             "p1Pron": self.p1Pron.get(),
             "p1Name": self.p1Name.get(),
+            "p1Twitch": self.p1Twitch.get(),
             "p1Color": "Blue",
             "p1Skin": "",
             "p1Character": "",
@@ -130,6 +142,7 @@ class App:
             "p2Team": self.p2Seed.get(),
             "p2Pron": self.p2Pron.get(),
             "p2Name": self.p2Name.get(),
+            "p2Twitch": self.p2Twitch.get(),
             "p2Color": "Red",
             "p2Skin": "",
             "p2Character": "",

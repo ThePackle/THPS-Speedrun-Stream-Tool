@@ -25,7 +25,9 @@ const p2NTimeSize = "32px";
 let socialInt1;
 let socialInt2;
 let socialInt3;
-let twitter1, twitch1, twitter2, twitch2, twitter3, twitch3;
+let socialInt4;
+let socialInt5;
+let twitter1, twitch1, twitter2, twitch2, twitter3, twitch3, p1Twitch, p2Twitch;
 let socialSwitch = true; //true = twitter, false = twitch
 const socialInterval = 12000;
 
@@ -47,6 +49,7 @@ function init() {
 
 async function getData(scInfo) {
 	let p1Name = scInfo["p1Name"];
+	p1Twitch = scInfo["p1Twitch"];
 	let p1Team = scInfo["p1Team"];
 	let p1Pron = scInfo["p1Pron"];
 	let p1Color = scInfo["p1Color"];
@@ -57,6 +60,7 @@ async function getData(scInfo) {
 	let p1Time;
 	
 	let p2Name = scInfo["p2Name"];
+	p2Twitch = scInfo["p2Twitch"];
 	let p2Team = scInfo["p2Team"];
 	let p2Pron = scInfo["p2Pron"];
 	let p2Color = scInfo["p2Color"];
@@ -278,10 +282,17 @@ async function getData(scInfo) {
 		updateSocialText("caster3Tr", twitter3, twitterSize, "caster3TwitterBox");
 		updateSocialText("caster3Th", twitch3, twitterSize, "caster3TwitchBox");
 
+		updateSocialText("player1Tr", p1Name, casterSize, "player1TwitterBox");
+		updateSocialText("player1Th", p1Twitch, twitterSize, "player1TwitchBox");
+		updateSocialText("player2Tr", p2Name, casterSize, "player2TwitterBox");
+		updateSocialText("player2Th", p2Twitch, twitterSize, "player2TwitchBox");
+
 		//setup twitter/twitch change
 		socialChange1("caster1TwitterBox", "caster1TwitchBox");
 		socialChange2("caster2TwitterBox", "caster2TwitchBox");
 		socialChange3("caster3TwitterBox", "caster3TwitchBox");
+		socialChange4("player1TwitterBox", "player1TwitchBox");
+		socialChange5("player2TwitterBox", "player2TwitchBox");
 		//set an interval to keep changing the names
 		socialInt1 = setInterval( () => {
 			socialChange1("caster1TwitterBox", "caster1TwitchBox");
@@ -291,6 +302,12 @@ async function getData(scInfo) {
 		}, socialInterval);
 		socialInt3 = setInterval(() => {
 			socialChange3("caster3TwitterBox", "caster3TwitchBox");
+		}, socialInterval);
+		socialInt4 = setInterval(() => {
+			socialChange4("player1TwitterBox", "player1TwitchBox");
+		}, socialInterval);
+		socialInt5 = setInterval(() => {
+			socialChange5("player2TwitterBox", "player2TwitchBox");
 		}, socialInterval);
 
 		//keep changing this boolean for the previous intervals
@@ -540,11 +557,9 @@ async function getData(scInfo) {
 				}
 			});
 		}
-		//caster 1"s twitter
 		if (document.getElementById("caster1Tr").textContent != twitter1){
 			updateSocial(twitter1, "caster1Tr", "caster1TwitterBox", twitch1, "caster1TwitchBox");
 		}
-		//caster 2"s twitch (same as above)
 		if (document.getElementById("caster1Th").textContent != twitch1){
 			updateSocial(twitch1, "caster1Th", "caster1TwitchBox", twitter1, "caster1TwitterBox");
 		}
@@ -561,10 +576,10 @@ async function getData(scInfo) {
 		if (document.getElementById("caster2Tr").textContent != twitter2){
 			updateSocial(twitter2, "caster2Tr", "caster2TwitterBox", twitch2, "caster2TwitchBox");
 		}
-
 		if (document.getElementById("caster2Th").textContent != twitch2){
 			updateSocial(twitch2, "caster2Th", "caster2TwitchBox", twitter2, "caster2TwitterBox");
 		}
+
 		//update caster 3 info
 		if (document.getElementById("caster3N").textContent != caster3){
 			fadeOut("#caster3TextBox", () => {
@@ -575,13 +590,37 @@ async function getData(scInfo) {
 				}
 			});
 		}
-		//caster 1"s twitter
 		if (document.getElementById("caster3Tr").textContent != twitter3){
 			updateSocial(twitter3, "caster3Tr", "caster3TwitterBox", twitter3, "caster3TwitchBox");
 		}
-		//caster 2"s twitch (same as above)
 		if (document.getElementById("caster3Th").textContent != twitch3){
 			updateSocial(twitch3, "caster3Th", "caster3TwitchBox", twitch3, "caster3TwitterBox");
+		}
+
+		//player 1 info
+		/* if (document.getElementById("player1N").textContent != p1Name){
+			fadeOut("#player1TextBox", () => {
+				updateSocialText("player1N", p1Name, casterSize, "player1TextBox");
+				if (p1Name != "") {
+					fadeIn("#player1TextBox", .2);
+				}
+			});
+		} */
+		if (document.getElementById("player1Th").textContent != p1Twitch){
+			updateSocial(p1Twitch, "player1Th", "player1TwitchBox", p1Twitch, "player1TwitterBox");
+		}
+
+		//player 2 info
+		/* if (document.getElementById("player2N").textContent != p2Name){
+			fadeOut("#player2TextBox", () => {
+				updateSocialText("player2N", p2Name, casterSize, "player2TextBox");
+				if (p2Name != "") {
+					fadeIn("#player2TextBox", .2);
+				}
+			});
+		} */
+		if (document.getElementById("player2Th").textContent != p2Twitch){
+			updateSocial(p2Twitch, "player2Th", "player2TwitchBox", p2Twitch, "player2TwitterBox");
 		}
 	}
 }
@@ -658,7 +697,6 @@ function socialChange1(twitterWrapperID, twitchWrapperID) {
 	const twitchWrapperEL = document.getElementById(twitchWrapperID);
 
 	if (startup) {
-
 		//if first time, set initial opacities so we can read them later
 		if (!twitter1 && !twitch1) { //if all blank
 			twitterWrapperEL.style.opacity = 0;
@@ -670,10 +708,7 @@ function socialChange1(twitterWrapperID, twitchWrapperID) {
 			twitterWrapperEL.style.opacity = 1;
 			twitchWrapperEL.style.opacity = 0;
 		}
-		
-
 	} else if (!!twitter1 && !!twitch1) {
-
 		if (socialSwitch) {
 			fadeOut(twitterWrapperEL, () => {
 				fadeIn(twitchWrapperEL, 0);
@@ -683,17 +718,14 @@ function socialChange1(twitterWrapperID, twitchWrapperID) {
 				fadeIn(twitterWrapperEL, 0);
 			});
 		}
-
 	}
 }
 //i didnt know how to make it a single function im sorry ;_;
 function socialChange2(twitterWrapperID, twitchWrapperID) {
-
 	const twitterWrapperEL = document.getElementById(twitterWrapperID);
 	const twitchWrapperEL = document.getElementById(twitchWrapperID);
 
 	if (startup) {
-
 		if (!twitter2 && !twitch2) {
 			twitterWrapperEL.style.opacity = 0;
 			twitchWrapperEL.style.opacity = 0;
@@ -704,9 +736,7 @@ function socialChange2(twitterWrapperID, twitchWrapperID) {
 			twitterWrapperEL.style.opacity = 1;
 			twitchWrapperEL.style.opacity = 0;
 		}
-
 	} else if (!!twitter2 && !!twitch2) {
-
 		if (socialSwitch) {
 			fadeOut(twitterWrapperEL, () => {
 				fadeIn(twitchWrapperEL, 0);
@@ -716,17 +746,14 @@ function socialChange2(twitterWrapperID, twitchWrapperID) {
 				fadeIn(twitterWrapperEL, 0);
 			});
 		}
-
 	}
 }
 
 function socialChange3(twitterWrapperID, twitchWrapperID) {
-
 	const twitterWrapperEL = document.getElementById(twitterWrapperID);
 	const twitchWrapperEL = document.getElementById(twitchWrapperID);
 
 	if (startup) {
-
 		if (!twitter3 && !twitch3) {
 			twitterWrapperEL.style.opacity = 0;
 			twitchWrapperEL.style.opacity = 0;
@@ -749,9 +776,65 @@ function socialChange3(twitterWrapperID, twitchWrapperID) {
 				fadeIn(twitterWrapperEL, 0);
 			});
 		}
-
 	}
 }
+
+function socialChange4(textWrapperID, twitchWrapperID) {
+	const textWrapperEL = document.getElementById(textWrapperID);
+	const twitchWrapperEL = document.getElementById(twitchWrapperID);
+
+	if (startup) {
+		if (!p1Name && !p1Twitch) {
+			textWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 0;
+		} else if (!p1Name && !!p1Twitch) {
+			textWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 1;
+		} else {
+			textWrapperEL.style.opacity = 1;
+			twitchWrapperEL.style.opacity = 0;
+		}
+	} else if (!!p1Name && !!p1Twitch) {
+		if (socialSwitch) {
+			fadeOut(textWrapperEL, () => {
+				fadeIn(twitchWrapperEL, 0);
+			});
+		} else {
+			fadeOut(twitchWrapperEL, () => {
+				fadeIn(textWrapperEL, 0);
+			});
+		}
+	}
+}
+
+function socialChange5(textWrapperID, twitchWrapperID) {
+	const textWrapperEL = document.getElementById(textWrapperID);
+	const twitchWrapperEL = document.getElementById(twitchWrapperID);
+
+	if (startup) {
+		if (!p2Name && !p2Twitch) {
+			textWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 0;
+		} else if (!p2Name && !!p2Twitch) {
+			textWrapperEL.style.opacity = 0;
+			twitchWrapperEL.style.opacity = 1;
+		} else {
+			textWrapperEL.style.opacity = 1;
+			twitchWrapperEL.style.opacity = 0;
+		}
+	} else if (!!p2Name && !!p2Twitch) {
+		if (socialSwitch) {
+			fadeOut(textWrapperEL, () => {
+				fadeIn(twitchWrapperEL, 0);
+			});
+		} else {
+			fadeOut(twitchWrapperEL, () => {
+				fadeIn(textWrapperEL, 0);
+			});
+		}
+	}
+}
+
 //function to decide when to change to what
 function updateSocial(mainSocial, mainText, mainBox, otherSocial, otherBox) {
 	//check if this is for twitch or twitter
