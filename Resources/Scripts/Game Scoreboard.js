@@ -282,17 +282,17 @@ async function getData(scInfo) {
 		updateSocialText("caster3Tr", twitter3, twitterSize, "caster3TwitterBox");
 		updateSocialText("caster3Th", twitch3, twitterSize, "caster3TwitchBox");
 
-		updateSocialText("player1Tr", p1Name, casterSize, "player1TwitterBox");
+		/* updateSocialText("player1Tr", p1Name, casterSize, "player1TwitterBox");
 		updateSocialText("player1Th", p1Twitch, twitterSize, "player1TwitchBox");
 		updateSocialText("player2Tr", p2Name, casterSize, "player2TwitterBox");
 		updateSocialText("player2Th", p2Twitch, twitterSize, "player2TwitchBox");
-
+ */
 		//setup twitter/twitch change
 		socialChange1("caster1TwitterBox", "caster1TwitchBox");
 		socialChange2("caster2TwitterBox", "caster2TwitchBox");
 		socialChange3("caster3TwitterBox", "caster3TwitchBox");
-		socialChange4("player1TwitterBox", "player1TwitchBox");
-		socialChange5("player2TwitterBox", "player2TwitchBox");
+		/* socialChange4("player1TwitterBox", "player1TwitchBox");
+		socialChange5("player2TwitterBox", "player2TwitchBox"); */
 		//set an interval to keep changing the names
 		socialInt1 = setInterval( () => {
 			socialChange1("caster1TwitterBox", "caster1TwitchBox");
@@ -303,12 +303,12 @@ async function getData(scInfo) {
 		socialInt3 = setInterval(() => {
 			socialChange3("caster3TwitterBox", "caster3TwitchBox");
 		}, socialInterval);
-		socialInt4 = setInterval(() => {
+		/* socialInt4 = setInterval(() => {
 			socialChange4("player1TwitterBox", "player1TwitchBox");
 		}, socialInterval);
 		socialInt5 = setInterval(() => {
 			socialChange5("player2TwitterBox", "player2TwitchBox");
-		}, socialInterval);
+		}, socialInterval); */
 
 		//keep changing this boolean for the previous intervals
 		setInterval(() => {

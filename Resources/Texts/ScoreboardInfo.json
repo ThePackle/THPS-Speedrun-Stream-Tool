@@ -4,7 +4,7 @@
     "p1Pron": "he/him",
     "p1Name": "Ace",
     "p1Twitch": "PokemonAce101",
-    "p1Color": "Blue",
+    "p1Color": "Red",
     "p1Skin": "",
     "p1Character": "",
     "p1NScore": "0",
@@ -14,7 +14,7 @@
     "p2Pron": "he/him",
     "p2Name": "Jarl",
     "p2Twitch": "PeacefulJarl379",
-    "p2Color": "Red",
+    "p2Color": "Blue",
     "p2Skin": "",
     "p2Character": "",
     "p2NScore": "0",
@@ -31,12 +31,12 @@
             "Twitch": "ThePackle"
         },
         {
-            "Name": "",
+            "Name": "test",
             "Bluesky": "",
             "Twitch": ""
         },
         {
-            "Name": "",
+            "Name": "test",
             "Bluesky": "",
             "Twitch": ""
         }
