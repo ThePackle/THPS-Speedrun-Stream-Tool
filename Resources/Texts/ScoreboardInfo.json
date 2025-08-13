@@ -1,44 +1,44 @@
 {
     "allowIntro": false,
-    "p1Team": "4",
+    "p1Team": "1",
     "p1Pron": "he/him",
-    "p1Name": "Ace",
-    "p1Twitch": "PokemonAce101",
+    "p1Name": "sawwl",
+    "p1Twitch": "",
     "p1Color": "Red",
     "p1Skin": "",
     "p1Character": "",
     "p1NScore": "0",
     "p1NTime": "0:00.000",
     "p1WL": "",
-    "p2Team": "13",
+    "p2Team": "8",
     "p2Pron": "he/him",
-    "p2Name": "Jarl",
-    "p2Twitch": "PeacefulJarl379",
+    "p2Name": "z4mdogg",
+    "p2Twitch": "",
     "p2Color": "Blue",
     "p2Skin": "",
     "p2Character": "",
     "p2NScore": "0",
     "p2NTime": "0:00.000",
     "p2WL": "",
-    "bestOf": "Bo3",
-    "round": "Round 2",
+    "bestOf": "Bo5",
+    "round": "Round 3",
     "tournament": "THPS3+4",
-    "format": "3",
+    "format": "5",
     "Casters": [
         {
             "Name": "ThePackle",
-            "Bluesky": "@thepackle.thps.run",
+            "Bluesky": "",
             "Twitch": "ThePackle"
         },
         {
-            "Name": "test",
+            "Name": "sawwl",
             "Bluesky": "",
-            "Twitch": ""
+            "Twitch": "sawwl"
         },
         {
-            "Name": "test",
+            "Name": "TH126",
             "Bluesky": "",
-            "Twitch": ""
+            "Twitch": "TH126"
         }
     ]
 }

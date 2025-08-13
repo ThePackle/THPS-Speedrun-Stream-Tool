@@ -32,7 +32,7 @@ class App:
             self.p1Twitch,
             self.p1NScore,
             self.p1NTime,
-        ) = self.create_player_section(x=19, y=42, bg="#8367ff", title="Player 1")
+        ) = self.create_player_section(x=19, y=42, bg="#8c0000", title="Player 1")
 
         (
             self.p2Seed,
@@ -41,7 +41,7 @@ class App:
             self.p2Twitch,
             self.p2NScore,
             self.p2NTime,
-        ) = self.create_player_section(x=463, y=42, bg="#8c0000", title="Player 2")
+        ) = self.create_player_section(x=463, y=42, bg="#8367ff", title="Player 2")
 
         matchinfo = tk.LabelFrame(self.root, text="Match Info", bg="#E4E2E2", fg="#000")
         matchinfo.place(x=19, y=300, width=869, height=120)
